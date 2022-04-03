@@ -1,0 +1,70 @@
+P2P1:
+router ospf 10
+network 10.0.0.0 0.0.0.3 area 0
+network 10.0.0.8 0.0.0.3 area 0
+network 10.0.0.12 0.0.0.3 area 0
+router ospf 10
+auto-cost reference-bandwidth 10000
+interface serial 0/2/0
+ip ospf hello-interval 20
+ip ospf dead-interval 80
+------------------------------------
+P2P2:
+router ospf 10
+network 10.0.0.0 0.0.0.3 area 0
+network 10.0.0.4 0.0.0.3 area 0
+network 192.168.1.0 0.0.0.255 area 0
+network 192.168.2.0 0.0.0.255 area 0
+router ospf 10
+passive-interface g0/0/0
+passive-interface g0/0/1
+auto-cost reference-bandwidth 10000
+------------------------------------
+P2P3:
+router ospf 10
+network 10.0.0.8 0.0.0.3 area 0
+network 10.0.0.4 0.0.0.3 area 0
+network 192.168.3.0 0.0.0.15 area 0
+router ospf 10
+passive-interface g0/0/0
+auto-cost reference-bandwidth 10000
+------------------------------------
+BC-1:
+interface g0/0/0
+ip ospf 10 area 0
+ip ospf priority 255
+interface s0/1/0
+ip ospf 10 area 0
+ip ospf hello-interval 20
+ip ospf dead-interval 80
+exit
+router ospf 10
+router-id 6.6.6.6
+default-information originate
+auto-cost reference-bandwidth 10000
+------------------------------------
+BC-2:
+interface g0/0/0
+ip ospf 10 area 0
+interface g0/0/1
+ip ospf 10 area 0
+exit
+router ospf 10
+router-id 5.5.5.5
+passive-interface g0/0/0
+auto-cost reference-bandwidth 10000
+------------------------------------
+BC-3:
+interface g0/0/0
+ip ospf 10 area 0
+interface g0/0/1
+ip ospf 10 area 0
+exit
+router ospf 10
+router-id 4.4.4.4
+passive-interface g0/0/0
+auto-cost reference-bandwidth 10000
+
+
+
+
